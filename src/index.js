@@ -107,7 +107,6 @@ import path from "path";
 import cors from "cors"; // Import the cors middleware
 
 import connectDB from "./database/db.js";
-import { log } from "console";
 dotenv.config();
 const app = express();
 app.set("view engine", "ejs");
@@ -115,10 +114,16 @@ app.set("views", path.join(new URL(".", import.meta.url).pathname, "views"));
 app.use(bodyParser.json());
 
 const url = process.env.MONGO_URL;
-connectDB(url);
+connectDB("mongodb+srv://jeet:123jeet321@jio.ydzozc6.mongodb.net/?retryWrites=true&w=majority&appName=jio");
 
 // Use cors middleware to allow all requests
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}));
+
 
 app.get("/", async (req, res) => {
   res.status(200).render("homeRoute", { message: "Welcome to the HomePage" });
@@ -194,13 +199,13 @@ app.post("/api/products", async (req, res) => {
 app.use((req, res, next) => {
   res.status(404).render("errorRoute", { message: "Route not found" });
 });
-// const startServer = async () => {
-//   try {
-//     app.listen(3001, () => console.log("server has started on port 3000"));
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
-// startServer();
+const startServer = async () => {
+  try {
+    app.listen(3000, () => console.log("server has started on port 3000"));
+  } catch (err) {
+    console.log(err);
+  }
+};
+startServer();
 export default app;
 
